@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-  const url = "https://gis-front-end.onrender.com";
+  const url = "https://gis-back-end.onrender.com";
   const [district, setDistrict] = useState("None");
   const [state, setState] = useState("None");
   const [tool, setTool] = useState(null);

@@ -22,6 +22,16 @@
   height: 100%;
   padding: 5px;
 }
+.center-none {
+  width: 85%;
+  background-color: #1008b8;
+  border: 3px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 5px;
+}
 .right {
   width: 20%;
   background-color: rgb(47, 47, 204);

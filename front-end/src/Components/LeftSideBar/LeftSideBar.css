@@ -10,6 +10,9 @@
   justify-content: flex-start;
   width: 100%;
 }
+.left.disabled {
+  display: none; /* Example of a dull background color */
+}
 
 .left-panels h2 {
   margin-bottom: 20px;

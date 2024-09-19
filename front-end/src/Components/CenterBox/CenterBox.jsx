@@ -226,7 +226,7 @@ const CenterBox = () => {
   }, [isDrawing, tool, zoomLevel, transform, drawings]);
   return (
     <div
-      className="center"
+      className={state !== "None" ? "center-none" : "center"}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >

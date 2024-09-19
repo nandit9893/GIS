@@ -28,7 +28,9 @@
   gap: 10px;
   margin: 20px 0;
 }
-
+.newclass {
+  display: none;
+}
 .center-change-button button {
   display: flex;
   align-items: center;

@@ -23,6 +23,7 @@ const CenterBox = () => {
     const indianMap = document.querySelector(".indian-map img");
 
     const resizeCanvas = () => {
+      if (!indianMap) return; 
       canvas.width = indianMap.clientWidth * zoomLevel;
       canvas.height = indianMap.clientHeight * zoomLevel;
       const ctx = canvas.getContext("2d");

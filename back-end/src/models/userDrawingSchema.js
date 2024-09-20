@@ -4,14 +4,32 @@ const drawingSchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ["Polygon", "Polyline", "Marker", "Circle", "Rectangle"],
+    enum: [
+      "Polygon",
+      "Polyline",
+      "Marker",
+      "Circle",
+      "CircleMarker",
+      "Rectangle",
+    ],
   },
   coordinates: {
     type: Schema.Types.Mixed,
-    required: true,
+    required: function () {
+      return this.type !== "Circle" && this.type !== "CircleMarker";
+    },
   },
-  properties: {
-    radius: Number,
+  center: {
+    type: [Number],
+    required: function () {
+      return this.type === "Circle" || this.type === "CircleMarker";
+    },
+  },
+  radius: {
+    type: Number,
+    required: function () {
+      return this.type === "Circle" || this.type === "CircleMarker";
+    },
   },
 });
 

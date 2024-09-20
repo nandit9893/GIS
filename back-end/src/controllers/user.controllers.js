@@ -184,43 +184,45 @@ const userDrawing = async (req, res) => {
   try {
     const userID = req.user._id;
     const { newDrawings } = req.body;
+
     if (!newDrawings || newDrawings.length === 0) {
       return res.status(400).json({
         success: false,
         message: "No drawings data provided by the user",
       });
     }
+    let userDrawingData = await UserDrawing.findOne({ userID });
 
-    for (const drawing of newDrawings) {
-      if (!drawing.type || !drawing.coordinates) {
-        return res.status(400).json({
-          success: false,
-          message: "Each drawing must have a type and coordinates",
-        });
-      }
-    }
-
-    let userDrawingDataAvailableOrCreating = await UserDrawing.findOne({
-      userID,
-    });
-
-    if (!userDrawingDataAvailableOrCreating) {
-      userDrawingDataAvailableOrCreating = new UserDrawing({
-        userID: userID,
+    if (!userDrawingData) {
+      userDrawingData = new UserDrawing({
+        userID,
         drawings: newDrawings,
       });
     } else {
-      userDrawingDataAvailableOrCreating.drawings.push(...newDrawings);
+      const existingDrawings = userDrawingData.drawings;
+
+      const uniqueNewDrawings = newDrawings.filter(
+        (newDrawing) =>
+          !existingDrawings.some(
+            (existingDrawing) =>
+              JSON.stringify(existingDrawing.coordinates) ===
+                JSON.stringify(newDrawing.coordinates) &&
+              existingDrawing.type === newDrawing.type
+          )
+      );
+
+      userDrawingData.drawings.push(...uniqueNewDrawings);
     }
 
-    await userDrawingDataAvailableOrCreating.save();
+    await userDrawingData.save();
 
     return res.status(200).json({
       success: true,
       message: "Drawing data saved successfully",
-      data: userDrawingDataAvailableOrCreating,
+      data: userDrawingData,
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Error saving drawing data",
@@ -240,7 +242,6 @@ const getDrawings = async (req, res) => {
         message: "No drawing data available for this user",
       });
     }
-
     return res.status(200).json({
       success: true,
       message: "Data fetched successfully",

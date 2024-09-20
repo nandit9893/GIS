@@ -1,9 +1,11 @@
+import axios from "axios";
 import { createContext, useState } from "react";
+import { toast } from "react-toastify";
 
 const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-  const url = "https://gis-back-end.onrender.com";
+ const url = "https://gis-back-end.onrender.com";
   const [district, setDistrict] = useState("None");
   const [state, setState] = useState("None");
   const [tool, setTool] = useState(null);
@@ -19,6 +21,51 @@ const AppContextProvider = ({ children }) => {
       return [];
     }
   });
+  const [userDrawingData, setUserDrawingData] = useState([]);
+  const [getDrawingData, setGetDrawingData] = useState([]); 
+
+  const savingUserDrawingData = async () => {
+    const saveDataUrl = `${url}/gis/user/save/drawing`;
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.post(
+        saveDataUrl,
+        { newDrawings: userDrawingData },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.success) {
+        toast.success("Tools saved successfully");
+      } else {
+        toast.error(response.data.message || "Failed to save tools");
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "An error occurred during saving data"
+      );
+    }
+  };
+
+  const fetchUserDrawingData = async () => {
+    const getDataUrl = `${url}/gis/user/get/drawings`;
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.get(getDataUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data.success) {
+        setGetDrawingData(response.data.data.drawings);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred during fetching data"
+      );
+    }
+  };
 
   const redrawCanvas = () => {
     const canvas = document.querySelector(".drawing-canvas");
@@ -77,6 +124,11 @@ const AppContextProvider = ({ children }) => {
     setRedoStack,
     clean,
     undo,
+    userDrawingData,
+    setUserDrawingData,
+    savingUserDrawingData,
+    getDrawingData,
+    fetchUserDrawingData,
   };
 
   return (

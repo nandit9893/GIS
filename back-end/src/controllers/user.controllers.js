@@ -1,4 +1,5 @@
 import { User } from "../models/user.models.js";
+import { UserDrawing } from "../models/userDrawingSchema.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 const generateAccessTokenAndRefreshToken = async (userId) => {
   try {
@@ -178,4 +179,80 @@ const userLogout = async (req, res) => {
       .json(new ApiError(500, "Something went wrong while logging out"));
   }
 };
-export { userRegister, userLogin, userLogout };
+
+const userDrawing = async (req, res) => {
+  try {
+    const userID = req.user._id;
+    const { newDrawings } = req.body;
+    if (!newDrawings || newDrawings.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No drawings data provided by the user",
+      });
+    }
+
+    for (const drawing of newDrawings) {
+      if (!drawing.type || !drawing.coordinates) {
+        return res.status(400).json({
+          success: false,
+          message: "Each drawing must have a type and coordinates",
+        });
+      }
+    }
+
+    let userDrawingDataAvailableOrCreating = await UserDrawing.findOne({
+      userID,
+    });
+
+    if (!userDrawingDataAvailableOrCreating) {
+      userDrawingDataAvailableOrCreating = new UserDrawing({
+        userID: userID,
+        drawings: newDrawings,
+      });
+    } else {
+      userDrawingDataAvailableOrCreating.drawings.push(...newDrawings);
+    }
+
+    await userDrawingDataAvailableOrCreating.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Drawing data saved successfully",
+      data: userDrawingDataAvailableOrCreating,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error saving drawing data",
+      error: error.message,
+    });
+  }
+};
+
+const getDrawings = async (req, res) => {
+  const userID = req.user._id;
+  try {
+    const userDataAvailable = await UserDrawing.findOne({ userID: userID });
+
+    if (!userDataAvailable) {
+      return res.status(404).json({
+        success: false,
+        message: "No drawing data available for this user",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Data fetched successfully",
+      data: userDataAvailable,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error getting drawing data",
+      error: error.message,
+    });
+  }
+};
+
+export { userRegister, userLogin, userLogout, userDrawing, getDrawings };

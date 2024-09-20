@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; 
 
 const RightSideBar = () => {
-  const { isDarkMode, setIsDarkMode, url, undo, clean, state} = useContext(AppContext); 
+  const { isDarkMode, setIsDarkMode, url, undo, clean, state, savingUserDrawingData, fetchUserDrawingData } = useContext(AppContext); 
   const buttonText = isDarkMode ? "Enable Light Mode" : "Enable Dark Mode";
 
   const toggleDarkMode = (event) => {
@@ -18,6 +18,12 @@ const RightSideBar = () => {
   };
 
   const navigate = useNavigate();
+
+  const handleSave = async(event) => {
+    event.preventDefault();
+    await savingUserDrawingData();
+    await fetchUserDrawingData();
+  }
 
   const logout = async (event) => {
     event.preventDefault();
@@ -51,8 +57,8 @@ const RightSideBar = () => {
         <button onClick={undo}><img src={left} alt="" />Prev</button>
         <button onClick={clean}><img src={right} alt="" />Clean</button>
       </div>
-      <div className={state === "None" ? "save-button" : "newclass"}>
-          <button>Save</button>
+      <div className="save-button">
+          <button onClick={handleSave}>Save</button>
       </div>
       <div className="logo">
         <img src={logo} alt="" />

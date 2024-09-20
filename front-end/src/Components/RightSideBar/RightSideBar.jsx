@@ -44,7 +44,11 @@ const RightSideBar = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred during logout");
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     }
   };
 

@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-  const url = "https://gis-back-end.onrender.com";
+  //const url = "https://gis-back-end.onrender.com";
+  const url = "http://localhost:8000";
   const [district, setDistrict] = useState("None");
   const [state, setState] = useState("None");
   const [tool, setTool] = useState(null);
@@ -42,9 +43,11 @@ const AppContextProvider = ({ children }) => {
         toast.error(response.data.message || "Failed to save tools");
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "An error occurred during saving data"
-      );
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     }
   };
 
@@ -61,10 +64,11 @@ const AppContextProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "An error occurred during fetching data"
-      );
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     }
   };
 

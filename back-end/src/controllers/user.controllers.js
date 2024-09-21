@@ -191,6 +191,7 @@ const userDrawing = async (req, res) => {
         message: "No drawings data provided by the user",
       });
     }
+
     let userDrawingData = await UserDrawing.findOne({ userID });
 
     if (!userDrawingData) {
@@ -201,16 +202,26 @@ const userDrawing = async (req, res) => {
     } else {
       const existingDrawings = userDrawingData.drawings;
 
-      const uniqueNewDrawings = newDrawings.filter(
-        (newDrawing) =>
-          !existingDrawings.some(
-            (existingDrawing) =>
-              JSON.stringify(existingDrawing.coordinates) ===
-                JSON.stringify(newDrawing.coordinates) &&
-              existingDrawing.type === newDrawing.type
-          )
-      );
-
+      const uniqueNewDrawings = newDrawings.filter((newDrawing) => {
+        return !existingDrawings.some((existingDrawing) => {
+          if (
+            (existingDrawing.type === "Circle" ||
+              existingDrawing.type === "CircleMarker") &&
+            newDrawing.type === existingDrawing.type
+          ) {
+            return (
+              JSON.stringify(existingDrawing.center) ===
+                JSON.stringify(newDrawing.center) &&
+              existingDrawing.radius === newDrawing.radius
+            );
+          }
+          return (
+            existingDrawing.type === newDrawing.type &&
+            JSON.stringify(existingDrawing.coordinates) ===
+              JSON.stringify(newDrawing.coordinates)
+          );
+        });
+      });
       userDrawingData.drawings.push(...uniqueNewDrawings);
     }
 
@@ -222,7 +233,6 @@ const userDrawing = async (req, res) => {
       data: userDrawingData,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Error saving drawing data",

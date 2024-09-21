@@ -63,11 +63,6 @@ const AppContextProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("An error occurred. Please try again.");
-      }
     }
   };
 

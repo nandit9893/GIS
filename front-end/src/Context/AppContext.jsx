@@ -38,6 +38,7 @@ const AppContextProvider = ({ children }) => {
       if (response.data.success) {
         toast.success("Tools saved successfully");
         setUserDrawingData([]);
+        fetchUserDrawingData();
       } else {
         toast.error(response.data.message || "Failed to save tools");
       }

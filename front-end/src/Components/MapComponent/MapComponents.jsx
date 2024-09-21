@@ -116,11 +116,66 @@ const MapComponent = ({ state, district }) => {
     }
   }, [state, district, fetchUserDrawingData]);
 
+  const renderDrawings = () => {
+    return getDrawingData.map((drawing) => {
+      switch (drawing.type) {
+        case "Circle":
+          return (
+            <Circle
+              key={drawing._id}
+              center={drawing.center}
+              radius={drawing.radius}
+            />
+          );
+        case "CircleMarker":
+          return (
+            <CircleMarker
+              key={drawing._id}
+              center={drawing.center}
+              radius={drawing.radius}
+            />
+          );
+        case "Polygon":
+          return (
+            <Polygon
+              key={drawing._id}
+              positions={drawing.coordinates[0]} // Ensure it's a 2D array
+            />
+          );
+        case "Polyline":
+          return (
+            <Polyline
+              key={drawing._id}
+              positions={drawing.coordinates.map(coord => [coord[0], coord[1]])} // Ensure it's in the correct format
+            />
+          );
+        case "Marker":
+          return (
+            <Marker
+              key={drawing._id}
+              position={drawing.coordinates}
+            />
+          );
+        case "Rectangle":
+          return (
+            <Polygon
+              key={drawing._id}
+              positions={drawing.coordinates[0]} // Rectangles as Polygons
+            />
+          );
+        default:
+          return null;
+      }
+    });
+  };
+  
+
   return (
     <MapContainer center={position} zoom={15} style={{ height: "500px", width: "100%" }} ref={mapRef} >
       <FeatureGroup>
         <EditControl position="topright" onCreated={_created} draw={{ rectangle: true, polyline: true, polygon: true, circle: true, marker: true, circlemarker: true }} />
       </FeatureGroup>
+      {renderDrawings()}
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'/>
       <UpdateMapPosition position={position} />
     </MapContainer>

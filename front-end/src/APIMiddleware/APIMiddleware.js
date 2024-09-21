@@ -1,5 +1,4 @@
-import { API_KEY } from "../Utils/API_KEY";
-
+import { API_KEY } from "../Utils/API_KEY.js";
 const sendLocation = async (state, district) => {
   const locationName = district.trim() ? `${district}, ${state}, India` : `${state}, India`;
   const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(

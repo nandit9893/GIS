@@ -79,6 +79,14 @@
   background-color: #06d406;
   transform: scale(1.05);
 }
+.save-button button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+  border: 2px solid #aaa;
+  box-shadow: none;
+  transform: none;
+}
 .logo {
   display: flex;
   align-items: center;

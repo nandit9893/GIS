@@ -1,4 +1,4 @@
-import { API_KEY } from "../Utils/API_KEY.js";
+const API_KEY = import.meta.env.VITE_API_KEY
 const sendLocation = async (state, district) => {
   const locationName = district.trim() ? `${district}, ${state}, India` : `${state}, India`;
   const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(

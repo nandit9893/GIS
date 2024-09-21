@@ -23,7 +23,7 @@ const CenterBox = () => {
     const indianMap = document.querySelector(".indian-map img");
 
     const resizeCanvas = () => {
-      if (!indianMap) return; 
+      if (!indianMap) return;
       canvas.width = indianMap.clientWidth * zoomLevel;
       canvas.height = indianMap.clientHeight * zoomLevel;
       const ctx = canvas.getContext("2d");
@@ -192,7 +192,7 @@ const CenterBox = () => {
     const drawing = canvas.toDataURL();
     const updatedDrawings = [...drawings, drawing];
     setDrawings(updatedDrawings);
-    localStorage.setItem("drawingData", JSON.stringify(updatedDrawings)); // Update local storage
+    localStorage.setItem("drawingData", JSON.stringify(updatedDrawings));
   };
 
   const loadDrawing = () => {
@@ -226,68 +226,33 @@ const CenterBox = () => {
     };
   }, [isDrawing, tool, zoomLevel, transform, drawings]);
   return (
-    <div
-      className={state !== "None" ? "center-none" : "center"}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    >
-      {state === "None" && (
-        <div className="zoom-controls">
-          <button onClick={zoomIn}>
-            <img src={plus} alt="Zoom In" />
-          </button>
-          <button onClick={zoomOut}>
-            <img src={minus} alt="Zoom Out" />
-          </button>
-        </div>
-      )}
+    <div className={state !== "None" ? "center-none" : "center"} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} >
+      {
+        state === "None" && 
+          ( 
+            <div className="zoom-controls">
+              <button onClick={zoomIn}><img src={plus} alt="Zoom In" /></button>
+              <button onClick={zoomOut}><img src={minus} alt="Zoom Out" /></button>
+            </div>
+          )
+      }
       <div className={`center-details ${isDarkMode ? "invert" : ""}`}>
-        {state !== "None" ? (
-          <MapComponent
-            state={state}
-            district={district === "None" ? "" : district}
-          />
-        ) : (
-          <div
-            className="indian-map"
-            style={{
-              transform: `translate(${transform.x}px, ${transform.y}px) scale(${zoomLevel})`,
-              pointerEvents: "none",
-            }}
-            onMouseDown={handleMouseDown}
-          >
-            <img
-              src={defaultindian}
-              alt="India map"
-              className="center-image"
-              style={{ transform: `scale(${zoomLevel})` }}
-            />
-          </div>
-        )}
-        <canvas
-          ref={canvasRef}
-          className="drawing-canvas"
-          onMouseDown={(e) => {
-            e.stopPropagation();
-            startDrawing(e);
-          }}
-          onMouseUp={(e) => {
-            e.stopPropagation();
-            finishDrawing(e);
-          }}
-          onMouseMove={(e) => {
-            e.stopPropagation();
-            draw(e);
-          }}
-          onMouseLeave={(e) => {
-            e.stopPropagation();
-            finishDrawing(e);
-          }}
-          style={{
-            transform: `scale(${zoomLevel})`,
-            transformOrigin: "top left",
-          }}
-        />
+        {
+          state !== "None" ? 
+          ( 
+            <MapComponent state={state} district={district === "None" ? "" : district}/>
+          ) : 
+          (
+            <div className="indian-map" style={{transform: `translate(${transform.x}px, ${transform.y}px) scale(${zoomLevel})`, pointerEvents: "none",}} onMouseDown={handleMouseDown}>
+              <img src={defaultindian} alt="India map" className="center-image" style={{ transform: `scale(${zoomLevel})` }} />
+            </div>
+          )
+        }
+        <canvas ref={canvasRef} className="drawing-canvas" onMouseDown={(e) => {e.stopPropagation(); startDrawing(e); }}
+                                                           onMouseUp={(e) => {e.stopPropagation(); finishDrawing(e); }}
+                                                           onMouseMove={(e) => {e.stopPropagation(); draw(e); }}
+                                                           onMouseLeave={(e) => {e.stopPropagation(); finishDrawing(e); }}
+                                                           style={{transform: `scale(${zoomLevel})`, transformOrigin: "top left",}}/>
       </div>
       <div className="center-elements">
         <Footer />

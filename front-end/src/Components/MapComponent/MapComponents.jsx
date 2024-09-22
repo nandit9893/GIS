@@ -47,7 +47,6 @@ const MapComponent = ({ state, district }) => {
         coordinates: geoJSONData.geometry.coordinates,
       };
     } else if (layer instanceof L.Rectangle) {
-      // Check if it's a rectangle
       drawingType = "Rectangle";
       formattedDrawing = {
         type: drawingType,

@@ -117,6 +117,7 @@ const AppContextProvider = ({ children }) => {
       });
       if(response.data.success){
         toast.success("Deleted all icons successfully");
+        setGetDrawingData([]);
         await fetchUserDrawingData();
       } else {
         toast.error(response.data.message);

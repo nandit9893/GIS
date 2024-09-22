@@ -121,7 +121,7 @@ const MapComponent = ({ state, district }) => {
                  );
         case "Rectangle":
           return (
-                    <Polygon key={drawing._id} positions={drawing.coordinates.map((coord) => [coord[1], coord[0]])} />
+                    <Polygon key={drawing._id} positions={drawing.coordinates[0].map((coord) => [coord[1], coord[0]])}/>
                  );
         default:
           return null;

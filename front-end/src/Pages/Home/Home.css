@@ -37,4 +37,7 @@
   background-color: rgb(47, 47, 204);
   padding: 20px 5px;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
 }

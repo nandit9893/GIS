@@ -182,7 +182,7 @@ const userLogout = async (req, res) => {
 
 const userDrawing = async (req, res) => {
   try {
-    const userID = req.user._id;
+    const userID = req.user.userID;
     const { newDrawings } = req.body;
 
     if (!newDrawings || newDrawings.length === 0) {
@@ -242,7 +242,7 @@ const userDrawing = async (req, res) => {
 };
 
 const getDrawings = async (req, res) => {
-  const userID = req.user._id;
+  const userID = req.user.userID;
   try {
     const userDataAvailable = await UserDrawing.findOne({ userID: userID });
 
@@ -266,4 +266,33 @@ const getDrawings = async (req, res) => {
   }
 };
 
-export { userRegister, userLogin, userLogout, userDrawing, getDrawings };
+const deleteCompleteDrawingData = async(req, res) => {
+  const  { userID } = req.params;
+  if(!userID){
+    return res.status(401).json({
+      success: false,
+      message: "User ID is required",
+    });
+  }
+  try {
+    const availableUser = await UserDrawing.findOneAndDelete({userID: userID});
+    if(!availableUser){
+      return res.status(400).json({
+        success: false,
+        message: "User not availabe",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Data deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).josn({
+      success: false,
+      message: "Error deleting data",
+      error: error.message,
+    });
+  }
+}
+
+export { userRegister, userLogin, userLogout, userDrawing, getDrawings, deleteCompleteDrawingData };

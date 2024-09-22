@@ -19,7 +19,7 @@ L.Icon.Default.mergeOptions({
 const MapComponent = ({ state, district }) => {
   const [position, setPosition] = useState([23.5, 80.75]);
   const mapRef = useRef();
-  const { setUserDrawingData, fetchUserDrawingData, getDrawingData } = useContext(AppContext);
+  const { setUserDrawingData, fetchUserDrawingData, getDrawingData, savingUserDrawingData } = useContext(AppContext);
   const _created = (e) => {
     const layer = e.layer;
     const geoJSONData = layer.toGeoJSON();
@@ -100,17 +100,29 @@ const MapComponent = ({ state, district }) => {
       switch (drawing.type) 
       {
         case "Circle":
-          return (<Circle key={drawing._id} center={[drawing.center[1], drawing.center[0]]} radius={drawing.radius} />);
+          return (
+                    <Circle key={drawing._id} center={[drawing.center[1], drawing.center[0]]} radius={drawing.radius} />
+                 );
         case "CircleMarker":
-          return (<CircleMarker key={drawing._id} center={[drawing.center[1], drawing.center[0]]} radius={drawing.radius} />);
+          return (
+                    <CircleMarker key={drawing._id} center={[drawing.center[1], drawing.center[0]]} radius={drawing.radius} />
+                 );
         case "Polygon":
-          return (<Polygon key={drawing._id} positions={drawing.coordinates[0].map(coord => [coord[1], coord[0]])} /> );
+          return (
+                    <Polygon key={drawing._id} positions={drawing.coordinates[0].map((coord) => [coord[1], coord[0]])} />
+                 );
         case "Polyline":
-          return (<Polyline key={drawing._id} positions={drawing.coordinates.map(coord => [coord[1], coord[0]])} /> );
+          return (
+                    <Polyline key={drawing._id} positions={drawing.coordinates.map((coord) => [coord[1], coord[0]])} />
+                 );
         case "Marker":
-          return (<Marker key={drawing._id} position={[drawing.coordinates[1], drawing.coordinates[0]]} /> );
+          return (
+                    <Marker key={drawing._id} position={[drawing.coordinates[1], drawing.coordinates[0]]} />
+                 );
         case "Rectangle":
-          return (<Polygon key={drawing._id} positions={drawing.coordinates[0].map(coord => [coord[1], coord[0]])} /> );
+          return (
+                    <Polygon key={drawing._id} positions={drawing.coordinates.map((coord) => [coord[1], coord[0]])} />
+                 );
         default:
           return null;
       }

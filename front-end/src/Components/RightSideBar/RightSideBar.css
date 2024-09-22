@@ -48,7 +48,7 @@
 
 .center-change-button button:hover {
   background-color: #f1e9e9;
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .center-change-button button img {
@@ -60,7 +60,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   margin: 20px 0;
+  gap: 10px;
 }
 .save-button button {
   background-color: #43c143;
@@ -91,7 +93,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 25px;
 }
 .logo img {
   width: 200px;
@@ -102,7 +104,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 80px;
 }
 .logout-button button {
   width: 80%;

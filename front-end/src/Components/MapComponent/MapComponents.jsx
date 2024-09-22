@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, FeatureGroup, Polygon, Polyline, Marker, Circl
 import { EditControl } from "react-leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
+import "leaflet-draw"; 
 import L from "leaflet";
 import sendLocation from "../../APIMiddleware/APIMiddleware.js";
 import UpdateMapPosition from "../../Utils/UpdateMapPosition.js";
@@ -24,79 +25,59 @@ const MapComponent = ({ state, district }) => {
     const geoJSONData = layer.toGeoJSON();
     let drawingType;
     let formattedDrawing;
-    switch (layer instanceof L.Circle) 
-    {
-      case true:
-        drawingType = "Circle";
-        formattedDrawing = {
-          type: drawingType,
-          center: geoJSONData.geometry.coordinates,
-          radius: layer.getRadius(),
-        };
-        break;
-      case false:
-        switch (layer instanceof L.CircleMarker) 
-        {
-          case true:
-            drawingType = "CircleMarker";
-            formattedDrawing = {
-              type: drawingType,
-              center: geoJSONData.geometry.coordinates,
-              radius: layer.getRadius(),
-            };
-            break;
-          case false:
-            switch (layer instanceof L.Marker) 
-            {
-              case true:
-                drawingType = "Marker";
-                formattedDrawing = {
-                  type: drawingType,
-                  coordinates: geoJSONData.geometry.coordinates,
-                };
-                break;
-              default:
-                switch (geoJSONData.geometry.type) 
-                {
-                  case "Polygon":
-                    drawingType = "Polygon";
-                    formattedDrawing = {
-                      type: drawingType,
-                      coordinates: geoJSONData.geometry.coordinates,
-                    };
-                    break;
-                  case "LineString":
-                    drawingType = "Polyline";
-                    formattedDrawing = {
-                      type: drawingType,
-                      coordinates: geoJSONData.geometry.coordinates,
-                    };
-                    break;
-                  case "Point":
-                    drawingType = "Point";
-                    formattedDrawing = {
-                      type: drawingType,
-                      coordinates: geoJSONData.geometry.coordinates,
-                    };
-                    break;
-                  case "Rectangle":
-                    drawingType = "Rectangle";
-                    formattedDrawing = {
-                      type: drawingType,
-                      coordinates: geoJSONData.geometry.coordinates,
-                    };
-                    break;
-                  default:
-                    return;
-                }
-            }
-        }
+  
+    if (layer instanceof L.Circle) {
+      drawingType = "Circle";
+      formattedDrawing = {
+        type: drawingType,
+        center: geoJSONData.geometry.coordinates,
+        radius: layer.getRadius(),
+      };
+    } else if (layer instanceof L.CircleMarker) {
+      drawingType = "CircleMarker";
+      formattedDrawing = {
+        type: drawingType,
+        center: geoJSONData.geometry.coordinates,
+        radius: layer.getRadius(),
+      };
+    } else if (layer instanceof L.Marker) {
+      drawingType = "Marker";
+      formattedDrawing = {
+        type: drawingType,
+        coordinates: geoJSONData.geometry.coordinates,
+      };
+    } else if (layer instanceof L.Rectangle) {
+      // Check if it's a rectangle
+      drawingType = "Rectangle";
+      formattedDrawing = {
+        type: drawingType,
+        coordinates: geoJSONData.geometry.coordinates,
+      };
+    } else if (geoJSONData.geometry.type === "Polygon") {
+      drawingType = "Polygon";
+      formattedDrawing = {
+        type: drawingType,
+        coordinates: geoJSONData.geometry.coordinates,
+      };
+    } else if (geoJSONData.geometry.type === "LineString") {
+      drawingType = "Polyline";
+      formattedDrawing = {
+        type: drawingType,
+        coordinates: geoJSONData.geometry.coordinates,
+      };
+    } else if (geoJSONData.geometry.type === "Point") {
+      drawingType = "Point";
+      formattedDrawing = {
+        type: drawingType,
+        coordinates: geoJSONData.geometry.coordinates,
+      };
     }
-
+  
     if (formattedDrawing) {
       setUserDrawingData((prev) => [...prev, formattedDrawing]);
     }
   };
+  
 
   useEffect(() => {
     const fetchLocation = async () => {

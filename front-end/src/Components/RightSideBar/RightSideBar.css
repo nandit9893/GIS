@@ -47,7 +47,7 @@
 }
 
 .center-change-button button:hover {
-  background-color: #ddd;
+  background-color: #f1e9e9;
   transform: scale(1.05);
 }
 

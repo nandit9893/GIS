@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { MapContainer, TileLayer, FeatureGroup, Polygon, Polyline, Marker, Circle, CircleMarker} from "react-leaflet";
+import { MapContainer, TileLayer, FeatureGroup, Polygon, Polyline, Marker, Circle, CircleMarker, Rectangle} from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
@@ -120,8 +120,9 @@ const MapComponent = ({ state, district }) => {
                     <Marker key={drawing._id} position={[drawing.coordinates[1], drawing.coordinates[0]]} />
                  );
         case "Rectangle":
+          const bounds = [[drawing.coordinates[0][1][1], drawing.coordinates[0][1][0]], [drawing.coordinates[0][3][1], drawing.coordinates[0][3][0]]];
           return (
-                    <Polygon key={drawing._id} positions={drawing.coordinates.map((coord) => [coord[1], coord[0]])} />
+                    <Rectangle key={drawing._id} bounds={bounds} />
                  );
         default:
           return null;

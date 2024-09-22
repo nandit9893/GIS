@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; 
 
 const RightSideBar = () => {
-  const { isDarkMode, setIsDarkMode, url, undo, clean, state, savingUserDrawingData, fetchUserDrawingData, userDrawingData, getDrawingData } = useContext(AppContext); 
+  const { isDarkMode, setIsDarkMode, url, undo, clean, state, savingUserDrawingData, userDrawingData, getDrawingData, deleteUserDrawingData, userID } = useContext(AppContext); 
   const buttonText = isDarkMode ? "Enable Light Mode" : "Enable Dark Mode";
 
   const toggleDarkMode = (event) => {
@@ -22,7 +22,6 @@ const RightSideBar = () => {
   const handleSave = async(event) => {
     event.preventDefault();
     await savingUserDrawingData();
-    await fetchUserDrawingData();
   }
 
   const logout = async (event) => {
@@ -52,6 +51,11 @@ const RightSideBar = () => {
     }
   };
 
+  const handleDelete = async(event) =>{
+    event.preventDefault();
+    await deleteUserDrawingData();
+  }
+
   return (
     <div className="right">
       <div className="top-button">
@@ -63,7 +67,7 @@ const RightSideBar = () => {
       </div>
       <div className={state !== "None" ? "save-button" : "newclass"}>
           <button onClick={handleSave} disabled={!userDrawingData || userDrawingData.length === 0} className={!userDrawingData || userDrawingData.length === 0 ? "disabled" : ""}>Save</button>
-          <button onClick={handleSave} disabled={!getDrawingData || getDrawingData.length === 0} className={!getDrawingData || getDrawingData.length === 0 ? "disabled" : ""}>Delete All</button>
+          <button onClick={handleDelete} disabled={!getDrawingData || getDrawingData.length === 0} className={!getDrawingData || getDrawingData.length === 0 ? "disabled" : ""}>Delete All</button>
       </div>
       <div className="logo">
         <img src={logo} alt="" />

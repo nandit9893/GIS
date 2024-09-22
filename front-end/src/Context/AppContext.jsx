@@ -22,7 +22,8 @@ const AppContextProvider = ({ children }) => {
     }
   });
   const [userDrawingData, setUserDrawingData] = useState([]);
-  const [getDrawingData, setGetDrawingData] = useState([]); 
+  const [getDrawingData, setGetDrawingData] = useState([]);
+  const [ID, setID] = useState("");
 
   const savingUserDrawingData = async () => {
     const saveDataUrl = `${url}/gis/user/save/drawing`;
@@ -36,9 +37,9 @@ const AppContextProvider = ({ children }) => {
         }
       );
       if (response.data.success) {
-        toast.success("Tools saved successfully");
+        toast.success("Icons saved successfully");
         setUserDrawingData([]);
-        fetchUserDrawingData();
+        await fetchUserDrawingData();
       } else {
         toast.error(response.data.message || "Failed to save tools");
       }
@@ -60,6 +61,7 @@ const AppContextProvider = ({ children }) => {
       });
       if (response.data.success) {
         setGetDrawingData(response.data.data.drawings);
+        setID(response.data.data.userID);
       } else {
         toast.error(response.data.message);
       }
@@ -106,6 +108,24 @@ const AppContextProvider = ({ children }) => {
     redrawCanvas();
   };
 
+  const deleteUserDrawingData = async() =>{
+    const deleteUrl = `${url}/gis/user/delete/drawing/data/complete/${ID}`;
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.post(deleteUrl, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if(response.data.success){
+        toast.success("Deleted all icons successfully");
+        await fetchUserDrawingData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const contextValues = {
     url,
     district,
@@ -129,6 +149,7 @@ const AppContextProvider = ({ children }) => {
     savingUserDrawingData,
     getDrawingData,
     fetchUserDrawingData,
+    deleteUserDrawingData,
   };
 
   return (

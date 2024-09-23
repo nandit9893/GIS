@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .top-button button {
@@ -65,6 +65,7 @@
   gap: 10px;
 }
 .save-button button {
+  position: relative;
   background-color: #43c143;
   border: 2px solid white;
   border-radius: 5px;
@@ -89,11 +90,33 @@
   box-shadow: none;
   transform: none;
 }
+.save-button button p {
+  display: none;
+  font-size: 15px;
+  position: absolute;
+  border-radius: 5px;
+  border: 1px solid black;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 5px;
+  bottom: -45px; 
+  left: 50%;
+  width: max-content;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.save-button button:hover p {
+  display: block;
+  opacity: 1;
+}
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 25px;
+  margin: 5px;
 }
 .logo img {
   width: 200px;
@@ -104,7 +127,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 80px;
+  margin: 10px 0;
 }
 .logout-button button {
   width: 80%;

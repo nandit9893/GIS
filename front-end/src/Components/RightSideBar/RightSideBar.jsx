@@ -67,7 +67,7 @@ const RightSideBar = () => {
       </div>
       <div className={state !== "None" ? "save-button" : "newclass"}>
           <button onClick={handleSave} disabled={!userDrawingData || userDrawingData.length === 0} className={!userDrawingData || userDrawingData.length === 0 ? "disabled" : ""}>Save</button>
-          <button onClick={handleDelete} disabled={!getDrawingData || getDrawingData.length === 0} className={!getDrawingData || getDrawingData.length === 0 ? "disabled" : ""}>Delete All</button>
+          <button onClick={handleDelete} disabled={!getDrawingData || getDrawingData.length === 0} className={!getDrawingData || getDrawingData.length === 0 ? "disabled" : ""}>Delete All <p>Delete all icons from the Map</p></button>
       </div>
       <div className="logo">
         <img src={logo} alt="" />
